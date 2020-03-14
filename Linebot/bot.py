@@ -935,6 +935,22 @@ def lineBot(op):
                     cl.findAndAddContactsByMid(midd)
                     cl.inviteIntoGroup(msg.to,[midd])
                     cl.cancelGroupInvitation(msg.to,[midd])
+		elif text.lower().startswith("tnk:"):
+                        separate = text.split(":")
+                        _name = text.replace(separate[0] + ":","")
+                        gs = cl.getGroup(msg.to)
+                        targets = []
+                        for g in gs.members:
+                            if _name in g.displayName:
+                                targets.append(g.mid)
+                        if targets == []:
+                            cl.relatedMessage(msg.to,"群組內沒有這個名稱",op.message.id)
+                        else:
+                            for target in targets:
+                                try:
+                                    cl.kickoutFromGroup(msg.to,[target])
+                                except:
+                                    pass
                 elif msg.text.lower().startswith("kt "):
                     targets = []
                     key = eval(msg.contentMetadata["MENTION"])
